@@ -84,4 +84,4 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 ## Author
 
-- [Your Name](https://github.com/your-username)
+- [Mayank Wadhwa](https://github.com/MmayankK21)
