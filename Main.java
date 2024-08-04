@@ -1,98 +1,76 @@
+import java.util.Random;
 import java.util.Scanner;
-
-class BankAccount {
-    private double balance;
-
-    public BankAccount(double balance) {
-        this.balance = balance;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println("Deposit successful. New balance: ₹" + String.format("%.2f", balance));
-        } else {
-            System.out.println("Invalid amount for deposit.");
-        }
-    }
-
-    public void withdraw(double amount) {
-        if (amount > 0 && balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawal successful. New balance: ₹" + String.format("%.2f", balance));
-        } else {
-            System.out.println("Insufficient funds or invalid amount for withdrawal.");
-        }
-    }
-}
-
-class ATM {
-    private BankAccount account;
-    private Scanner scanner;
-
-    public ATM(BankAccount account) {
-        this.account = account;
-        scanner = new Scanner(System.in);
-    }
-
-    public void displayMenu() {
-        System.out.println("===============================================");
-        System.out.println("|                                             |");
-        System.out.println("|             Welcome to the ATM              |");
-        System.out.println("|                                             |");
-        System.out.println("===============================================");
-        System.out.println("| Options:                                    |");
-        System.out.println("| 1. Withdraw                                 |");
-        System.out.println("| 2. Deposit                                  |");
-        System.out.println("| 3. Check Balance                            |");
-        System.out.println("| 0. Exit                                     |");
-        System.out.println("===============================================");
-        System.out.print("Please choose an option: ");
-
-        int choice = scanner.nextInt();
-
-        switch (choice) {
-            case 1:
-                System.out.print("Enter amount to withdraw: ₹");
-                double withdrawAmount = scanner.nextDouble();
-                account.withdraw(withdrawAmount);
-                break;
-            case 2:
-                System.out.print("Enter amount to deposit: ₹");
-                double depositAmount = scanner.nextDouble();
-                account.deposit(depositAmount);
-                break;
-            case 3:
-                System.out.println("Your current balance: ₹" + String.format("%.2f", account.getBalance()));
-                break;
-            case 0:
-                System.out.println("===============================================");
-                System.out.println("|         Thank you for using our ATM         |");
-                System.out.println("|              Have a nice day!               |");
-                System.out.println("===============================================");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Invalid option. Please choose again.");
-                break;
-        }
-
-        System.out.println();
-        displayMenu();
-    }
-}
 
 public class Main {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        boolean playAgain = true;
+        int totalScore = 0;
 
-        BankAccount userAccount = new BankAccount(100000.0);
+        while (playAgain) {
+            System.out.println("\n========================================");
+            System.out.println("  Welcome to the Number Guessing Game!");
+            System.out.println("========================================\n");
 
-        ATM atm = new ATM(userAccount);
+            System.out.print("Enter the minimum number for the range: ");
+            int min = sc.nextInt();
+            System.out.print("Enter the maximum number for the range: ");
+            int max = sc.nextInt();
+            sc.nextLine();
 
-        atm.displayMenu();
+            int random = generateRandomNumber(min, max);
+            int score = 10;
+
+            System.out.println("\nI have chosen a number from " + min + " to " + max + ".");
+            System.out.println("You have 10 attempts to guess it!\n");
+
+            for (int i = 1; i <= 10; i++) {
+                System.out.println("\n---- Attempt " + i + " ----");
+                System.out.print("Enter your guess: ");
+                int guess = sc.nextInt();
+                sc.nextLine();
+
+                if (guess == random) {
+                    System.out.println("\n🎉 Congratulations! You guessed the correct number: " + random + "!");
+                    totalScore += score;
+                    break;
+                } else {
+                    System.out.println("\nIncorrect guess.");
+                    score--;
+                    if (guess < random) {
+                        System.out.println("Hint: Your guess was too low.");
+                    } else {
+                        System.out.println("Hint: Your guess was too high.");
+                    }
+                }
+            }
+
+            if (score > 0) {
+                System.out.println("\nWell done! Your score for this round is: " + score);
+            } else {
+                System.out.println("\nYou've used all your attempts. The correct number was " + random + ".");
+            }
+
+            System.out.print("\nWould you like to play again? (Y/N): ");
+            String answer = sc.nextLine();
+
+            if (answer.equalsIgnoreCase("N")) {
+                playAgain = false;
+                System.out.println("\nThank you for playing! Your final score is: " + totalScore);
+                System.out.println("==============================================");
+            }
+        }
+
+        sc.close();
+    }
+
+    public static int generateRandomNumber(int min, int max) {
+        if (min > max) {
+            System.out.println("Error: The minimum value should be less than or equal to the maximum value.");
+            return Integer.MIN_VALUE;
+        } else {
+            Random random = new Random();
+            return random.nextInt((max - min) + 1) + min;
+        }
     }
 }
