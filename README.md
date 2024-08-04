@@ -74,9 +74,6 @@ Thank you for playing! Your final score is: 7
    java Main
    ```
    
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
 
 ## Author
 
